@@ -5,6 +5,7 @@ import Home from './component/home';
 import Navbar from './component/Navbar';
 import Register from './component/register/register';
 import Pricing from './component/pricing';
+import Dashboard from './component/dashboard/dashboard';
 import Login from './component/login/login';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 function App() {
@@ -14,6 +15,10 @@ function App() {
       {
         path:'/auth',
         element:<Login/>
+      },
+      {
+        path:'/dashboard',
+        element:<Dashboard/>
       },
       {
         path:'/register',
