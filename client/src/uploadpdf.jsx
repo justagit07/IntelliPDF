@@ -10,11 +10,14 @@ export default function Uploadpdf() {
       
         const handleFileChange = (e) => {
           setFile(e.target.files[0]);
+          console.log('this is the file', file)
         };
 
 
         const handleUpload = async () => {
             const formData = new FormData();
+            console.log('this is the file', file)
+            console.log('this is the file which is save in the form data')
             formData.append('pdf', file);
             console.log(formData,' this  is the form dat')
         

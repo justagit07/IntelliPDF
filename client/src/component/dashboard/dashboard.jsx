@@ -3,11 +3,30 @@ import {useDropzone} from 'react-dropzone';
 import axios from 'axios';
 export default function Dashboard() {
 
-        const onDrop = (acceptedFiles) => {
+
+        const[data,setdata]=useState(
+          {
+            filename:'',
+            date:''
+          }
+        )
+        const [showupload, setshowupload]= useState(false)
+
+        const onDrop = async(acceptedFiles) => {
+
+          const formData = new FormData();
+          formData.append('pdf', acceptedFiles[0]);
 
           console.log(acceptedFiles);
+          const response=  await axios.post('http://localhost:3000/upload', formData)
+           
+           console.log('this is the response', response)
+           if(response)
+           {
+            setshowupload(false)
+           }
+          
 
-        
 
 
 
@@ -15,9 +34,8 @@ export default function Dashboard() {
 
 
         }
-        const {getRootProps, getInputProps} = useDropzone({onDrop, accept: '.pdf'});
+        const {getRootProps, getInputProps} = useDropzone({onDrop});
 
-    const [showDiv, setShowDiv]= useState(false)
   return (
     <>
 
@@ -37,15 +55,16 @@ export default function Dashboard() {
       <div className='m-12 border-b-2 p-4 flex justify-around'>
          <p className='text-4xl font-bold'>My Files</p>
          <div className='p-2 rounded-md bg-blue-600 w-[100px]'>
-            <button className=' text-center align-middle content-center text-white ' onClick={() => setShowDiv(true)}> 
+            <button className=' text-center align-middle content-center text-white ' onClick={() => setshowupload(true)}> 
              Add PDF
             </button>
             
             </div>      
 
       </div>
-             <div {...getRootProps()} className="dropzone">
-      <div className='w-[50vw] h-[30vh] p-3 relative left-[23vw]  rounded-lg bg-white '>
+
+      {showupload?  
+      <div {...getRootProps()} className='dropzone w-[50vw] h-[30vh] p-3 relative left-[23vw]  rounded-lg bg-white '>
 
         <div className='w-[48vw] h-[26vh]   content-center   mt-1 rounded-lg border-2 border-dashed '>
              <div className='flex justify-center my-3' >
@@ -68,9 +87,10 @@ export default function Dashboard() {
               </div>
               </div>
 
-        </div>
+
         
-         </div>
+         </div>:''}
+            
 
 
      </div>

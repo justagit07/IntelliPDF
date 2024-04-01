@@ -63,10 +63,14 @@ app.listen(3000, ()=>{
 })
 
 
-app.post('/', upload.single('pdf'), async (req,res)=>
+app.post('/upload', upload.single('pdf'), async (req,res)=>
 {
+    console.log(req.body);
+    
+    const { path,fieldname} = req.file;
 
-    const { path } = req.file;
+
+    
     console.log('this is the req.file meta data', req.file)
     const dataBuffer = fs.readFileSync(path);
     console.log('this si the databuffer', dataBuffer)
@@ -82,7 +86,7 @@ app.post('/', upload.single('pdf'), async (req,res)=>
     encoding_format: "float",
   });
   console.log('this is the embeddidng', embedding);
-   const x= await Vectordb.create({title:'neeraj', description:text, vector:embedding.data[0].embedding})
+   const x= await Vectordb.create({title:fieldname, description:text, vector:embedding.data[0].embedding})
   res.status(200).json(embedding)
 })
 
