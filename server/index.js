@@ -67,7 +67,7 @@ app.post('/upload', upload.single('pdf'), async (req,res)=>
 {
     console.log(req.body);
     
-    const { path,fieldname} = req.file;
+    const { path,originalname} = req.file;
 
 
     
@@ -86,8 +86,13 @@ app.post('/upload', upload.single('pdf'), async (req,res)=>
     encoding_format: "float",
   });
   console.log('this is the embeddidng', embedding);
-   const x= await Vectordb.create({title:fieldname, description:text, vector:embedding.data[0].embedding})
-  res.status(200).json(embedding)
+   const x= await Vectordb.create({title:originalname, description:text, vector:embedding.data[0].embedding})
+   console.log(x)
+  res.status(200).json({
+    createdAt:x.createdAt,
+    updatedAt:x.updatedAt,
+    name:x.title
+  })
 })
 
 

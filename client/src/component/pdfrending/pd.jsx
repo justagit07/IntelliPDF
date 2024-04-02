@@ -42,9 +42,7 @@ function Pdfcom() {
 
 <>
     
-    <div className='border-2 mt-1 border-green-500 h-[8vh]'>
-        hnji
-    </div>
+
     <div className='flex-1 w-[60vw] border-2 mt-3 max-h-screen'>
     <SimpleBar
       autoHide={false}

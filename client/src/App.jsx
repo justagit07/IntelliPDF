@@ -1,12 +1,14 @@
 import './App.css';
-import Pdfcom from './pd';
+
 import Uploadpdf from './uploadpdf';
 import Home from './component/home';
 import Navbar from './component/Navbar';
+import Main from './component/main/Main.jsx';
 import Register from './component/register/register';
 import Pricing from './component/pricing';
 import Dashboard from './component/dashboard/dashboard';
 import Login from './component/login/login';
+import Pdfcom from './component/pdfrending/pd.jsx';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 function App() {
 
@@ -15,6 +17,10 @@ function App() {
       {
         path:'/auth',
         element:<Login/>
+      },
+      {
+        path:'/main',
+        element:<Main/>
       },
       {
         path:'/dashboard',

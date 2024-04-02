@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import {useDropzone} from 'react-dropzone';
 import axios from 'axios';
+import { useEffect } from 'react';
+import date from 'date-and-time'
+import Dashnav from '../dashnav';
+import { format } from 'date-fns'
 export default function Dashboard() {
 
 
-        const[data,setdata]=useState(
-          {
-            filename:'',
-            date:''
-          }
+        const[data,setdata]=useState([  ]
         )
         const [showupload, setshowupload]= useState(false)
 
@@ -26,14 +26,17 @@ export default function Dashboard() {
             setshowupload(false)
            }
           
-
-
-
-
-
-
+           setdata([...data,{
+            filename:response.data.name,
+            createdAt:response.data.createdAt,
+            updatedAt:response.data.updatedAt
+           }])
 
         }
+
+        useEffect(()=>{
+          console.log('this is the data', data)
+        },[data])
         const {getRootProps, getInputProps} = useDropzone({onDrop});
 
   return (
@@ -41,16 +44,8 @@ export default function Dashboard() {
 
     <div className='h-full   bg-neutral-100'>
 
-        
-       <nav className='z-10 sticky flex font-medium align-middle items-center justify-around gap-16 top-0 w-full px-[5vw] py-5 h-[40px] border-b border-grey bg-white'>
-        <div className='font'>  IntelliPDF</div>
-        <div className=' flex   gap-4 '>
-       <button className=' text-center text-sm '> Dashboard</button>
-       <i className="fi fi-rr-circle-user"></i>
-        </div>
-
-     </nav>
-
+        <Dashnav/>
+     
      <div className='  w-full  items-center  content-center '>
       <div className='m-12 border-b-2 p-4 flex justify-around'>
          <p className='text-4xl font-bold'>My Files</p>
@@ -90,6 +85,60 @@ export default function Dashboard() {
 
         
          </div>:''}
+
+
+         { date && data.length!==0 ?    <div className='ml-10 w-[85vw] overflow-auto h-[50vh] flex gap-7'>
+          
+          { data.map((e)=>
+         {
+              return(
+                <>
+                <div className='bg-white w-[250px]  rounded-lg   h-24 p-3  '>
+
+                  <div className='flex items-center gap-3 ml-2 p-1  border-b-2'>
+                    <div>
+                     <img src="../../src/assets/pdf.png" className='w-9 h-9' alt="" />
+                    </div>
+                    <p>{e.filename}</p>
+                  </div>
+
+                  <div className='flex ml-3 mt-3 items-cente gap-12 '>
+                  <p>
+                      ➕
+                      {format(
+                        new Date(e.createdAt),
+                        'MMM yyyy'
+                        )}
+                  </p>
+                    
+                  <p>
+                   <img src="../../src/assets/delete.svg" alt="itsdelete" />
+                   
+                  </p>
+                  </div>
+
+
+
+
+                </div>
+
+                
+                
+                
+                </>
+              )
+              
+              
+              
+            })
+          }</div>:
+         <div className='mt-16 flex flex-col items-center gap-2'>
+         <h3 className='font-semibold text-xl'>
+           Pretty empty around here
+         </h3>
+         <p>Let&apos;s upload your first PDF.</p>
+       </div>
+        }
             
 
 
