@@ -1,5 +1,4 @@
 import './App.css';
-
 import Uploadpdf from './uploadpdf';
 import Home from './component/home';
 import Navbar from './component/Navbar';
@@ -18,6 +17,7 @@ function App() {
         path:'/auth',
         element:<Login/>
       },
+
       {
         path:'/main',
         element:<Main/>

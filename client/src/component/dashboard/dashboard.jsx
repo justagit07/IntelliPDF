@@ -5,9 +5,16 @@ import { useEffect } from 'react';
 import date from 'date-and-time'
 import Dashnav from '../dashnav';
 import { format } from 'date-fns'
+import { useNavigate } from 'react-router-dom';
+import { setPdf } from '../../states'
+import { useDispatch } from 'react-redux'
+import Main from '../main/Main';
+
 export default function Dashboard() {
+         const dispatch= useDispatch()
 
-
+         
+       const navigate= useNavigate()
         const[data,setdata]=useState([  ]
         )
         const [showupload, setshowupload]= useState(false)
@@ -16,11 +23,25 @@ export default function Dashboard() {
 
           const formData = new FormData();
           formData.append('pdf', acceptedFiles[0]);
+              console.log('yeh kaha h bhaishab')
+            console.log('thisis the form data', formData)
+            console.log('thisis the form data', acceptedFiles[0])
 
           console.log(acceptedFiles);
+
+
+
+
           const response=  await axios.post('http://localhost:3000/upload', formData)
-           
+          
+           dispatch(setPdf(response.data))
            console.log('this is the response', response)
+           console.log('this is the response', response.data)
+           navigate('/main')
+
+
+
+
            if(response)
            {
             setshowupload(false)
@@ -110,21 +131,11 @@ export default function Dashboard() {
                         'MMM yyyy'
                         )}
                   </p>
-                    
                   <p>
                    <img src="../../src/assets/delete.svg" alt="itsdelete" />
-                   
                   </p>
                   </div>
-
-
-
-
                 </div>
-
-                
-                
-                
                 </>
               )
               

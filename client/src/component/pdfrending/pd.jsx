@@ -1,5 +1,6 @@
-import { useState } from 'react';
+
 import { Document, Page } from 'react-pdf';
+import { useState, useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector'
 import {
     ChevronDown,
@@ -13,11 +14,6 @@ import { useForm } from 'react-hook-form'
 import SimpleBar from 'simplebar-react'
 import { pdfjs } from 'react-pdf';
 
-
-
-
-
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
@@ -25,14 +21,27 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
+
+
+
+
+import { useSelector } from 'react-redux'
+
+
+
 function Pdfcom() {
+  const x= useSelector(state=> state.posts?.name)
+  console.log('this is the x', x)
+  
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
+
 
   function onDocumentLoadSuccess({ numPages }){
     console.log('this is the numpages', numPages)
     setNumPages(numPages);
   }
+
   const { width, ref } = useResizeDetector()
   const [scale, setScale] = useState(1)
   const [rotation, setRotation] = useState(0)
@@ -43,10 +52,10 @@ function Pdfcom() {
 <>
     
 
-    <div className='flex-1 w-[60vw] border-2 mt-3 max-h-screen'>
+    <div className='flex-1 w-[60vw] border-2 mt-1  max-h-screen'>
     <SimpleBar
       autoHide={false}
-      className='max-h-[calc(100vh-7rem)]'>
+      className='max-h-[calc(100vh-11vh)]'>
       <div ref={ref}>
         <Document
           loading={
@@ -54,12 +63,16 @@ function Pdfcom() {
               <Loader2 className='my-24 h-6 w-6 animate-spin' />
             </div>
           }
-          
+                                                             
           onLoadSuccess={({ numPages }) =>
-          setNumPages(numPages)
+          setNumPages(numPages) 
+
         }
-        file='sample.pdf'
-        className='max-h-full'>
+        file={`/@fs/Users/neerajrawat/pdf-project/server/public/${x}`}
+
+
+
+      className='max-h-full'>
 
 
           <Page
@@ -81,7 +94,10 @@ loading={
         </Document>
       </div>
     </SimpleBar>
-      <div className='flex justify-between text-[10px]  md:text-lg'>
+      <div className='flex justify-between px-8 text-[10px]  md:text-lg'>
+      
+      <div className='w-28 pl-1  rounded-lg flex gap-1 bg-neutral-300  text-md font-thin '>
+        <img src="../../src/assets/back.svg" className='invert' alt="" />
 
       <button
         onClick={() => {
@@ -94,9 +110,11 @@ loading={
         >
         Previous
       </button>
-      <p>
+      </div>
+      <p className='text-sm align-middle text-center content-center'>
         Page {pageNumber} of {numPages}
       </p>
+      <div className='w-20 pl-2  rounded-lg flex gap-1 bg-neutral-300  text-md font-thin '>
       <button
         onClick={() => {
             if(pageNumber<numPages)
@@ -106,16 +124,25 @@ loading={
             }
         }}
         >
-        Next
+          Next
       </button>
+          <img src="../../src/assets/next.svg" className='invert' alt="" />
+          </div>
+      <div >
+
       <button
-      
+
+
       onClick={() => setRotation((prev) => prev + 90)}
-      variant='ghost'
-      aria-label='rotate 90 degrees'>
-                rotate
+       aria-label='rotate 90 degrees'>
+        <div className='flex'>
+        <img src="../../src/assets/rotate.svg" alt="" />
+
+
+        </div>
 
           </button>
+        </div>
             </div>
   </div>
    </>

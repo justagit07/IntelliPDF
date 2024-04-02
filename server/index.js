@@ -5,12 +5,15 @@ const fs = require('fs');
 require('dotenv').config();
 const bodyParser = require('body-parser'); // Import bodyParser
 const OpenAI = require('openai'); // Import OpenAI
-const axios= require('axios')
 const cors = require('cors')
+
+
+
+
 const mongoose= require('mongoose')
 
 const { MongoClient } = require('mongodb');
-const Vectordb= require('./model/vector.jsx')
+const Vectordb= require('./model/vector.js')
 
 
 // const openai = new OpenAI();
@@ -68,8 +71,6 @@ app.post('/upload', upload.single('pdf'), async (req,res)=>
     console.log(req.body);
     
     const { path,originalname} = req.file;
-
-
     
     console.log('this is the req.file meta data', req.file)
     const dataBuffer = fs.readFileSync(path);
