@@ -8,7 +8,8 @@ const OpenAI = require('openai'); // Import OpenAI
 const cors = require('cors')
 
 
-
+//importing the routes for the auth
+const authroutes = require('./routes/auth.js')
 
 const mongoose= require('mongoose')
 
@@ -219,3 +220,7 @@ app.post('/answer', async(req,res)=>
   console.log('final answer from the chatgpt are finally ', response?.choices[0]?.message.content)
  
 })
+
+//  auth routes login and the register
+
+app.use('/auth', authroutes)
