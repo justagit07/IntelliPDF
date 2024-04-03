@@ -58,7 +58,7 @@ const submit= async(data) =>
               <button type='submit' className='w-[300px] ml-14 items-center text-white bg-blue-500 h-10 rounded-lg mt-2'> Sign up</button>
          </form>
           
-         <p className='mt-4 text-sm  text-center'>Already have account ? <Link to='/register' className='text-blue-500'> Sign in </Link></p>
+         <p className='mt-4 text-sm  text-center'>Already have account ? <Link to='/login' className='text-blue-500'> Sign in </Link></p>
     </div>
 
 </div>

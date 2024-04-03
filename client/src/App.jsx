@@ -9,22 +9,20 @@ import Dashboard from './component/dashboard/dashboard';
 import Login from './component/login/login';
 import Pdfcom from './component/pdfrending/pd.jsx';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+import { useSelector} from 'react-redux';
 function App() {
+  
+   const isauth= useSelector(state=> state.accessToken)
 
   const routes= createBrowserRouter(
      [
       {
-        path:'/auth',
+        path:'/login',
         element:<Login/>
-      },
-
-      {
-        path:'/main',
-        element:<Main/>
       },
       {
         path:'/dashboard',
-        element:<Dashboard/>
+        element:isauth?<Dashboard/>:<Login/>
       },
       {
         path:'/register',
@@ -32,15 +30,11 @@ function App() {
       },
       {
         path:'/',
-        element:<Uploadpdf/>
-      },
-      {
-        path:'/home',
         element:<Home/>
       },
       {
         path:'/show',
-        element:<Pdfcom/>
+        element:isauth?<Pdfcom/>:<Login/>
       },
       {
         path:'/home/pricing',

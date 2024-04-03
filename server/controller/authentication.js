@@ -30,11 +30,42 @@ const register= async(req,res)=>
 
 const login= async (req,res)=>
 {
-     console.log('hnji ')
+    try {
+
       const {email, password}= req.body
-      console.log(req.body)
-      const user= await  User.findById({email})
-      console.log('this is the user', user);
+        const user= await  User.findOne({email})
+        if(!user)
+        {
+          console.log("email id is invalid")
+          return res.status(500).json({message:"invalid email "})
+
+        }
+        
+        const passwordcheck=  await user.isPasswordCorrect(password)
+        if(!passwordcheck)
+        {
+              console.log('password is incorrect')
+          return  res.status(402).json({message:"password is incorrect"})
+
+        }
+           
+        const accessToken= await user.createAccessToken()
+        if(!accessToken)
+        {
+              console.log('unable to genrate the acesstoken');
+              return res.status(500).json({message:"acesstoken is not genrated"})
+              
+        }
+        console.log('accesstoken', accessToken);
+        res.status(200).json({accessToken,user, message:"token is genreated succesfully authentication complete"})
+        
+
+
+    } catch (error) {
+      console.log('this is the error', error)
+      res.status(500).json(error)
+    }
+     
       
 
 }

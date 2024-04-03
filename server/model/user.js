@@ -14,6 +14,11 @@ const user_schema= new mongoose.Schema(
         required:true,
         unique:true
       },
+      password:
+      {
+       type:String,
+       required:true
+      },
     
       subscription:
       {
@@ -36,7 +41,7 @@ user_schema.methods.createAccessToken= ()=>
     return jwt.sign({
         _id:this._id,
         email:this.email
-    }, `${process.env.JWTSECRET}`, {expireIn:`${process.env.JWTEXPIRY}`})
+    }, `${process.env.JWTSECRET}`, {expiresIn:`${process.env.JWTEXPIRY}`})
 }
 
 const User=mongoose.model("User", user_schema)
