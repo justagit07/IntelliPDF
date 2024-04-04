@@ -16,7 +16,7 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
 import OpenAI from 'openai'
-
+import deleteroutes from './routes/pdf.js'
 
 
 
@@ -172,3 +172,5 @@ const openai = new OpenAI({
   res.status(200).json({answer: response?.choices[0]?.message.content})
   console.log('answer...........', response?.choices[0]?.message.content)
 })
+
+app.use('/deletepdf', deleteroutes)

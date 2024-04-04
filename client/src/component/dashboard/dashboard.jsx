@@ -62,6 +62,25 @@ export default function Dashboard() {
 
         }
 
+
+        // delete button work
+        const handledelete = async function (e)
+        {
+
+              const others= data.filter((er)=> er._id != e._id )
+           console.log('this is the others', others)
+               try {
+  
+             const response= axios.post('http://localhost:3000/deletepdf', {pdfId:e._id, userId})
+              setcount(count-1)
+              setdata([...others])
+
+                   } catch (error) {
+                    console.log('this is the error')
+                }
+
+        }
+
         useEffect(()=>{
           console.log('this is the data', data)
         },[data])
@@ -135,13 +154,14 @@ export default function Dashboard() {
          </div>:''}
 
 
-         { date && data.length!==0 ?    <div className='ml-10 w-[90vw]   h-[60vh] flex  flex-wrap gap-9'>
+         { date && data.length!==0 ?    <div className='ml-10 w-[90vw]  justify-center
+          h-[60vh] flex  flex-wrap gap-9'>
           
           { data.map((e)=>
          {
               return(
                 <>
-                <div className='bg-white w-[250px]  relative rounded-lg  h-24 p-3  '>
+                <div className='bg-white w-[300px]   relative rounded-lg   h-24 p-3  '>
 
                   <div className='flex items-center gap-3 ml-2 p-1  border-b-2'   onClick={()=>handleclick(e)}>
                     <div>
@@ -155,11 +175,14 @@ export default function Dashboard() {
                       ➕
                       {format(
                         new Date(e.createdAt),
-                        'MMM yyyy'
+                        'dd MMM yyyy '
                         )}
                   </p>
-                  <p>
-                   <img src="../../src/assets/delete.svg" alt="itsdelete" />
+                  <p className='bg-red-50 rounded-sm'>
+                    <button onClick={()=>handledelete(e)}>
+
+                   <img src="../../src/assets/delete.svg" className='fill-blue-500 invert h-6' alt="itsdelete" />
+                    </button>
                   </p>
                   </div>
                 </div>

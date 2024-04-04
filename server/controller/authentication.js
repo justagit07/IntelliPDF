@@ -36,23 +36,18 @@ export const login= async (req,res)=>
     try {
 
       const {email, password}= req.body
-
-      
-        const user= await  User.findOne({email})
+        const user= await User.findOne({email})
         if(!user)
         {
           console.log("email id is invalid")
-          return res.status(500).json({message:"invalid email "})
+          return res.status(500).json({message:"invalid email "})  }
 
-        }
-        
         const passwordcheck=  await user.isPasswordCorrect(password)
         if(!passwordcheck)
-        {
-              console.log('password is incorrect')
+        { console.log('password is incorrect')
           return  res.status(402).json({message:"password is incorrect"})
-
         }
+        
         const accessToken= await user.createAccessToken()
         if(!accessToken)
         {
@@ -61,11 +56,14 @@ export const login= async (req,res)=>
               
         }
         const allupload= user.pdfupload
-        console.log(`this is the all uploaded pdf id of the user ${user.name} `, allupload)
+        console.log(`this is the all uploaded pdf id of the  ${user.firstname} `, allupload)
            
         const detail= await  Promise.all( allupload.map(async(e)=>  await Vectordb.findById({_id:e})))
+
+        
         
         const final = detail.map(({title, _id , createdAt})=> {return {title, _id , createdAt }})
+
 
         console.log('accesstoken', accessToken);
 
