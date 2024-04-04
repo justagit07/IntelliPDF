@@ -2,18 +2,9 @@
 import { Document, Page } from 'react-pdf';
 import { useState, useEffect } from 'react';
 import { useResizeDetector } from 'react-resize-detector'
-import {
-    ChevronDown,
-    ChevronUp,
-    Loader2,
-    RotateCw,
-    Search,
-  } from 'lucide-react'
-
-import { useForm } from 'react-hook-form'
+import {Loader2} from 'lucide-react'
 import SimpleBar from 'simplebar-react'
 import { pdfjs } from 'react-pdf';
-
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
@@ -23,14 +14,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 
-
 import { useSelector } from 'react-redux'
 
-
-
-function Pdfcom() {
- 
-
+export default function Pdfcom() {
   const pdf= useSelector(state=>state.currentpdf)
   console.log('this is the current pdf running', pdf)
   const pdftitle= pdf.title
@@ -46,8 +32,7 @@ function Pdfcom() {
   const { width, ref } = useResizeDetector()
   const [scale, setScale] = useState(1)
   const [rotation, setRotation] = useState(0)
-  const [renderedScale, setRenderedScale] = useState(null)
-  const isLoading = renderedScale !== scale
+
   return (
 
 <>
@@ -87,9 +72,6 @@ loading={
     <div className='flex justify-center'>
                 <Loader2 className='my-24 h-6 w-6 animate-spin' />
               </div>
-            }
-            onRenderSuccess={() =>
-                setRenderedScale(scale)
             }
             />
         </Document>
@@ -149,5 +131,4 @@ loading={
    </>
   );
 }
-export default Pdfcom;
 

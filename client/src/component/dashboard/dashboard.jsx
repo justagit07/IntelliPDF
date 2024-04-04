@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { setPdf , setuser,setcurrentpdf, setuserpdfupload} from '../../states'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Main from '../main/Main';
-
 export default function Dashboard() {
            
          const dispatch= useDispatch()
@@ -55,6 +53,7 @@ export default function Dashboard() {
               createdAt:response.data.createdAt,
               updatedAt:response.data.updatedAt
              }])
+             setcount(()=>count+1)
           } 
           catch (error) {
             console.log("this is the error", error.response)
@@ -68,11 +67,19 @@ export default function Dashboard() {
         },[data])
         const {getRootProps, getInputProps} = useDropzone({onDrop});
 
-       const handleclick= function(e)
+       const handleclick=  async function(e)
        {
-        console.log('this is the click pdf', e.title)
-        dispatch(setcurrentpdf(e))
-        navigate('/main')
+      try {
+          console.log('this is the click pdf', e.title)
+          const res =  axios.post('http://localhost:3000/pdfview',  {filename:e.title})
+          dispatch(setcurrentpdf(e))
+          navigate('/main')
+      } 
+      catch (error) 
+      {
+        console.log('this is the error', error)
+        
+      }
        }
 
 

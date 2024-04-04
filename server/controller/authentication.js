@@ -1,4 +1,4 @@
-import bcryt from 'bcrypt'
+import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 dotenv.config()
 import User from '../model/user.js'

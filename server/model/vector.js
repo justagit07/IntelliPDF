@@ -3,8 +3,9 @@ import mongoose from "mongoose"
 const Vector_schema= new mongoose.Schema(
     {
         title:String,
-        description:String,
-        vector:[Number],
+        size:Number,
+        path:String,
+        
 
     },
 {timestamps:true}
