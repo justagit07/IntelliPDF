@@ -2,10 +2,12 @@ import React from 'react'
 import {Link , useNavigate} from 'react-router-dom'
 import {useForm}     from 'react-hook-form'
 import axios from 'axios'
-export default function Register()
 
-{
-   
+
+
+export default function Register(){
+
+   const navigate= useNavigate()
   const {register, handleSubmit, reset , formState:{errors, isSubmitting}}= useForm()
 
 
@@ -15,10 +17,18 @@ const submit= async(data) =>
 {
 
 
-  console.log('this is the data', data)
-      const response=  await axios.post('http://localhost:3000/auth', data)
-      console.log('this is the response ', response)
-      
+  try {
+    console.log('this is the data', data)
+        const response=  await axios.post('http://localhost:3000/auth', data)
+        console.log('this is the response ', response)
+        navigate('/Login')
+        
+  } catch (error) 
+  {
+    console.log('this is the error')
+    console.log(error.response)
+
+  }
 }
 
 

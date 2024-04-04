@@ -3,8 +3,9 @@ import {useForm} from 'react-hook-form'
 import axios from 'axios'
 
 import { useDispatch } from 'react-redux'
-import {settoken, setuser} from '../../states'
+import {settoken, setuser, setupload} from '../../states'
 import {Link, useNavigate} from 'react-router-dom'
+
 
 export default function Login() {
    
@@ -20,6 +21,7 @@ export default function Login() {
           console.log('this is the response', response)
           dispatch(settoken(response.data.accessToken))
           dispatch(setuser(response.data.user))
+          dispatch(setupload(response.data.final))
           navigate('/dashboard')
         } 
         catch (error) {

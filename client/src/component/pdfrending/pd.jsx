@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import SimpleBar from 'simplebar-react'
 import { pdfjs } from 'react-pdf';
 
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
@@ -23,16 +24,16 @@ import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 
 
-
-
 import { useSelector } from 'react-redux'
 
 
 
 function Pdfcom() {
-  const x= useSelector(state=> state.posts?.name)
-  console.log('this is the x', x)
-  
+ 
+
+  const pdf= useSelector(state=>state.currentpdf)
+  console.log('this is the current pdf running', pdf)
+  const pdftitle= pdf.title
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -68,7 +69,7 @@ function Pdfcom() {
           setNumPages(numPages) 
 
         }
-        file={`/@fs/Users/neerajrawat/pdf-project/server/public/${x}`}
+        file={`/@fs/Users/neerajrawat/pdf-project/server/public/${pdftitle}`}
 
 
 

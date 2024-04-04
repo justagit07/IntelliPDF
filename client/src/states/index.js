@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 // 01 this is like usuall the state  like use state varible you can change state of under inital state object  from anywhere using the reducers
 const initialState={
+     currentpdf:{},
      uploads:{},
     user:{},
-    accessToken:{},
+    accessToken:null,
 }
 
 export const authSlice= createSlice(
@@ -28,6 +29,26 @@ export const authSlice= createSlice(
          setuser:(state,action)=>
          {
             state.user= action.payload
+         },
+         setuserpdfupload:(state,action)=>
+         {
+            state.user.pdfupload= [...state.user.pdfupload, action.payload]
+         },
+         setupload:(state,action)=>
+         {
+            state.uploads= action.payload
+         },
+         logout:(state,action)=>
+         {
+            state.accessToken= action.payload
+             state.user=action.payload
+             state.uploads=action.payload
+             state.currentpdf= action.payload
+         },
+         setcurrentpdf:(state,action)=>
+         {
+            state.currentpdf= action.payload
+
          }
          
     }
@@ -35,5 +56,5 @@ export const authSlice= createSlice(
 )
 
 
-export const {setPdf, settoken, setuser}= authSlice.actions;
+export const {setPdf, settoken,logout, setuser,setupload ,setcurrentpdf, setuserpdfupload}= authSlice.actions;
 export default authSlice.reducer

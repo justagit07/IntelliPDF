@@ -48,7 +48,7 @@ export default function Home() {
                      <div className='flex  justify-center'>
  
                             
-                            <Link to='/auth'>
+                            <Link to='/dashboard'>
                             <img src="../../src/assets/addfile.svg" className='fill-rose-500 '    alt='svg of file' />
                             </Link>
                      </div>
@@ -56,14 +56,14 @@ export default function Home() {
                       Click to Upload or Drop PDF/DOC here
                       </div>
                       <div className='  my-3 text-neutral-600 text-center'>
-                      Upload up to 20 files at once
+                      Upload up to 5 files for Free!!
                       </div>
                       <div className='items-center content-center  my-3 flex justify-center'>
 
                      <button className='flex justify-center items-center content-center w-36 h-10 rounded-lg bg-[#2563EB] '>
                      <i className="fi fi-rr-file-pdf invert  m-2" ></i>
                       <div className=' font-semibold items-center text-white text-center '> 
-                      <Link to='/auth'>
+                      <Link to='/dashboard'>
                       Upload Files
                       </Link>
                       </div>

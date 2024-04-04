@@ -1,7 +1,8 @@
-const mongoose= require('mongoose')
-const bcrypt= require('bcrypt')
-const jwt=require('jsonwebtoken')
-require('dotenv').config()
+import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const user_schema= new mongoose.Schema(
     {
@@ -25,7 +26,7 @@ const user_schema= new mongoose.Schema(
         type:String,
         default:'free'
       },
-      accessToken:String
+      pdfupload:[]
     },
 {timestamps:true}
 )
@@ -36,13 +37,12 @@ user_schema.methods.isPasswordCorrect= async function(password)
 }
 
 
-user_schema.methods.createAccessToken= ()=>
-{
+user_schema.methods.createAccessToken= function()
+{  
     return jwt.sign({
         _id:this._id,
         email:this.email
     }, `${process.env.JWTSECRET}`, {expiresIn:`${process.env.JWTEXPIRY}`})
 }
-
-const User=mongoose.model("User", user_schema)
-module.exports = User
+const User = mongoose.model("User", user_schema)
+export default User

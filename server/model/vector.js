@@ -1,5 +1,4 @@
-const mongoose= require('mongoose')
-
+import mongoose from "mongoose"
 
 const Vector_schema= new mongoose.Schema(
     {
@@ -12,4 +11,4 @@ const Vector_schema= new mongoose.Schema(
 )
 
 const Vectordb=mongoose.model("Vectordb", Vector_schema)
-module.exports = Vectordb
+export default Vectordb

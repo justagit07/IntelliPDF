@@ -8,5 +8,4 @@ const upload_schema= new mongoose.Schema(
 {timestamps:true}
 )
 
-const Upload=mongoose.model("Upload", upload_schema)
-module.exports = Upload
+export default Upload=mongoose.model("Upload", upload_schema)

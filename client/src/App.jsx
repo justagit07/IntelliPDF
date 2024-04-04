@@ -12,7 +12,8 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import { useSelector} from 'react-redux';
 function App() {
   
-   const isauth= useSelector(state=> state.accessToken)
+   const isauth= Boolean(useSelector(state=> state.accessToken))
+   console.log('this is the isauth', isauth)
 
   const routes= createBrowserRouter(
      [
@@ -27,6 +28,10 @@ function App() {
       {
         path:'/register',
         element:<Register/>
+      },
+      {
+        path:'/main',
+        element:<Main/>
       },
       {
         path:'/',

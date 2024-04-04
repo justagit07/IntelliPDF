@@ -6,52 +6,60 @@ import date from 'date-and-time'
 import Dashnav from '../dashnav';
 import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom';
-import { setPdf } from '../../states'
-import { useDispatch } from 'react-redux'
+import { setPdf , setuser,setcurrentpdf, setuserpdfupload} from '../../states'
+import { useDispatch, useSelector } from 'react-redux'
+
 import Main from '../main/Main';
 
 export default function Dashboard() {
+           
          const dispatch= useDispatch()
+         const userId=useSelector(state=> state.user._id)
+         const Alreadyuploads= useSelector(state=> state.uploads)
+         const [count , setcount]= useState(Alreadyuploads.length)
+         console.log('this is the user who are uploading things', userId)
 
          
        const navigate= useNavigate()
-        const[data,setdata]=useState([  ]
-        )
+        const[data,setdata]=useState(Alreadyuploads)
         const [showupload, setshowupload]= useState(false)
 
         const onDrop = async(acceptedFiles) => {
 
-          const formData = new FormData();
-          formData.append('pdf', acceptedFiles[0]);
-              console.log('yeh kaha h bhaishab')
-            console.log('thisis the form data', formData)
-            console.log('thisis the form data', acceptedFiles[0])
-
-          console.log(acceptedFiles);
-
-
-
-
-          const response=  await axios.post('http://localhost:3000/upload', formData)
+          try {
+            const formData = new FormData();
+            formData.append('pdf', acceptedFiles[0]);
+            formData.append('userID', userId);
           
-           dispatch(setPdf(response.data))
-           console.log('this is the response', response)
-           console.log('this is the response', response.data)
-           navigate('/main')
+                console.log('yeh kaha h bhaishab')
+              console.log('thisis the form data', formData)
+              console.log('thisis the form data', acceptedFiles[0])
+  
+            console.log(acceptedFiles);
+            const response=  await axios.post('http://localhost:3000/upload', formData)
+            
+             dispatch(setPdf(response.data))
+             console.log('this is the response', response)
+             console.log('this is the response', response.data)
 
+              dispatch(setuserpdfupload(response.data._id))
 
-
-
-           if(response)
-           {
-            setshowupload(false)
-           }
-          
-           setdata([...data,{
-            filename:response.data.name,
-            createdAt:response.data.createdAt,
-            updatedAt:response.data.updatedAt
-           }])
+  
+             if(response)
+             {
+              setshowupload(false)
+             }
+            
+             setdata([...data,{
+              title:response.data.name,
+              createdAt:response.data.createdAt,
+              updatedAt:response.data.updatedAt
+             }])
+          } 
+          catch (error) {
+            console.log("this is the error", error.response)
+            
+          }
 
         }
 
@@ -59,6 +67,17 @@ export default function Dashboard() {
           console.log('this is the data', data)
         },[data])
         const {getRootProps, getInputProps} = useDropzone({onDrop});
+
+       const handleclick= function(e)
+       {
+        console.log('this is the click pdf', e.title)
+        dispatch(setcurrentpdf(e))
+        navigate('/main')
+       }
+
+
+
+
 
   return (
     <>
@@ -70,17 +89,18 @@ export default function Dashboard() {
      <div className='  w-full  items-center  content-center '>
       <div className='m-12 border-b-2 p-4 flex justify-around'>
          <p className='text-4xl font-bold'>My Files</p>
+         { count<6?
          <div className='p-2 rounded-md bg-blue-600 w-[100px]'>
             <button className=' text-center align-middle content-center text-white ' onClick={() => setshowupload(true)}> 
              Add PDF
             </button>
             
-            </div>      
+            </div>  :' '}
 
       </div>
 
       {showupload?  
-      <div {...getRootProps()} className='dropzone w-[50vw] h-[30vh] p-3 relative left-[23vw]  rounded-lg bg-white '>
+      <div {...getRootProps()} className='dropzone w-[50vw] h-[30vh] p-3 relative left-[23vw] mb-8  rounded-lg bg-white '>
 
         <div className='w-[48vw] h-[26vh]   content-center   mt-1 rounded-lg border-2 border-dashed '>
              <div className='flex justify-center my-3' >
@@ -108,19 +128,19 @@ export default function Dashboard() {
          </div>:''}
 
 
-         { date && data.length!==0 ?    <div className='ml-10 w-[85vw] overflow-auto h-[50vh] flex gap-7'>
+         { date && data.length!==0 ?    <div className='ml-10 w-[90vw]   h-[60vh] flex  flex-wrap gap-9'>
           
           { data.map((e)=>
          {
               return(
                 <>
-                <div className='bg-white w-[250px]  rounded-lg   h-24 p-3  '>
+                <div className='bg-white w-[250px]  relative rounded-lg  h-24 p-3  '>
 
-                  <div className='flex items-center gap-3 ml-2 p-1  border-b-2'>
+                  <div className='flex items-center gap-3 ml-2 p-1  border-b-2'   onClick={()=>handleclick(e)}>
                     <div>
                      <img src="../../src/assets/pdf.png" className='w-9 h-9' alt="" />
                     </div>
-                    <p>{e.filename}</p>
+                    <p>{e.title}</p>
                   </div>
 
                   <div className='flex ml-3 mt-3 items-cente gap-12 '>

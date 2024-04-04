@@ -1,11 +1,14 @@
-const bcrypt = require('bcrypt')
-const User= require('../model/user')
-const mongoose= require('mongoose')
-const jwt = require('jsonwebtoken')
-const createJwtToken= require('../utils/jwt')
+import bcryt from 'bcrypt'
+import dotenv from 'dotenv'
+dotenv.config()
+import User from '../model/user.js'
+import Vectordb from '../model/vector.js'
+import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
 
 
-const register= async(req,res)=>
+
+export const register= async(req,res)=>
 {
     try {
         const {firstname, lastname, email, pass}= req.body
@@ -28,11 +31,13 @@ const register= async(req,res)=>
 
 
 
-const login= async (req,res)=>
+export const login= async (req,res)=>
 {
     try {
 
       const {email, password}= req.body
+
+      
         const user= await  User.findOne({email})
         if(!user)
         {
@@ -48,7 +53,6 @@ const login= async (req,res)=>
           return  res.status(402).json({message:"password is incorrect"})
 
         }
-           
         const accessToken= await user.createAccessToken()
         if(!accessToken)
         {
@@ -56,11 +60,17 @@ const login= async (req,res)=>
               return res.status(500).json({message:"acesstoken is not genrated"})
               
         }
-        console.log('accesstoken', accessToken);
-        res.status(200).json({accessToken,user, message:"token is genreated succesfully authentication complete"})
+        const allupload= user.pdfupload
+        console.log(`this is the all uploaded pdf id of the user ${user.name} `, allupload)
+           
+        const detail= await  Promise.all( allupload.map(async(e)=>  await Vectordb.findById({_id:e})))
         
+        const final = detail.map(({title, _id , createdAt})=> {return {title, _id , createdAt }})
+
+        console.log('accesstoken', accessToken);
 
 
+        res.status(200).json({accessToken,user, final, message:"token is genreated succesfully authentication complete"})
     } catch (error) {
       console.log('this is the error', error)
       res.status(500).json(error)
@@ -70,4 +80,3 @@ const login= async (req,res)=>
 
 }
 
-module.exports = {register, login}
