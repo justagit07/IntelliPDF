@@ -1,10 +1,11 @@
 import React from 'react'
 import Dashboard from './dashboard/dashboard'
 import {Link} from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch , useSelector} from 'react-redux'
 import {logout} from '../states/index'
 
 export default function Dashnav() {
+       const check= useSelector(state=> state.user.subscription)
 
  const dispatch= useDispatch()
  const handleclick= function ()
@@ -20,6 +21,12 @@ export default function Dashnav() {
         <div className=' flex   gap-4 '>
        <button className=' text-center text-sm ' > <Link to='/dashboard'>Dashboard</Link> </button>
        <i className="fi fi-rr-circle-user"></i>
+       {  check==='premium' ? <div className='flex'>
+       <img src="./src/assets/king.svg "  />
+        <p className='text-sm  content-center'>pro</p>
+       </div>: ''}
+      
+
         <button onClick={handleclick}>
         <i class="fi fi-rr-sign-out-alt"></i>
        </button>

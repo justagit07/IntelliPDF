@@ -34,6 +34,10 @@ export const authSlice= createSlice(
          {
             state.user.pdfupload= [...state.user.pdfupload, action.payload]
          },
+         changeuserpdfupload:(state,action)=>
+         {
+            state.user.pdfupload= [ ...action.payload]
+         },
          setupload:(state,action)=>
          {
             state.uploads= action.payload
@@ -56,5 +60,5 @@ export const authSlice= createSlice(
 )
 
 
-export const {setPdf, settoken,logout, setuser,setupload ,setcurrentpdf, setuserpdfupload}= authSlice.actions;
+export const {setPdf, settoken,logout, setuser,setupload ,setcurrentpdf,changeuserpdfupload, setuserpdfupload}= authSlice.actions;
 export default authSlice.reducer

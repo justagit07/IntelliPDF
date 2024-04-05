@@ -10,6 +10,7 @@ import Login from './component/login/login';
 import Pdfcom from './component/pdfrending/pd.jsx';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import { useSelector} from 'react-redux';
+import Subsciption from './component/Subscription/subsciption.jsx';
 function App() {
   
    const isauth= Boolean(useSelector(state=> state.accessToken))
@@ -20,6 +21,10 @@ function App() {
       {
         path:'/login',
         element:<Login/>
+      },
+      {
+        path:'/sucess/:id',
+        element:<Subsciption/>
       },
       {
         path:'/dashboard',
@@ -42,7 +47,7 @@ function App() {
         element:isauth?<Pdfcom/>:<Login/>
       },
       {
-        path:'/home/pricing',
+        path:'/home/pricing/:id',
         element:<Pricing/>
       }
      ]

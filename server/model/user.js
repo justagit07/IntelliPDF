@@ -26,7 +26,22 @@ const user_schema= new mongoose.Schema(
         type:String,
         default:'free'
       },
-      pdfupload:[]
+      pdfupload:[{ type: mongoose.Schema.Types.ObjectId, ref: 'vectordb' }],
+      sessionId:
+      {
+        type:String,
+        default:''
+      },
+      paid_sub:
+      {
+        type:Boolean,
+        default:false
+      },
+      customerId:String,
+      subscriptionId:String,
+      planStartedIn:String,
+      planExpireIn:String
+
     },
 {timestamps:true}
 )

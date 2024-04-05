@@ -6,15 +6,17 @@ import date from 'date-and-time'
 import Dashnav from '../dashnav';
 import { format } from 'date-fns'
 import { useNavigate } from 'react-router-dom';
-import { setPdf , setuser,setcurrentpdf, setuserpdfupload} from '../../states'
+import { setPdf ,setcurrentpdf,changeuserpdfupload, setuserpdfupload, setupload} from '../../states'
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function Dashboard() {
            
          const dispatch= useDispatch()
          const userId=useSelector(state=> state.user._id)
+         const plan=useSelector(state=> state.user.subscription)
          const Alreadyuploads= useSelector(state=> state.uploads)
          const [count , setcount]= useState(Alreadyuploads.length)
+
          console.log('this is the user who are uploading things', userId)
 
          
@@ -35,8 +37,8 @@ export default function Dashboard() {
   
             console.log(acceptedFiles);
             const response=  await axios.post('http://localhost:3000/upload', formData)
-            
-             dispatch(setPdf(response.data))
+
+             dispatch(setupload(response.data.final)) 
              console.log('this is the response', response)
              console.log('this is the response', response.data)
 
@@ -53,7 +55,10 @@ export default function Dashboard() {
               createdAt:response.data.createdAt,
               updatedAt:response.data.updatedAt
              }])
-             setcount(()=>count+1)
+             if(plan !=='premium')
+             {
+               setcount(()=>count+1)
+             }
           } 
           catch (error) {
             console.log("this is the error", error.response)
@@ -67,23 +72,49 @@ export default function Dashboard() {
         const handledelete = async function (e)
         {
 
-              const others= data.filter((er)=> er._id != e._id )
-           console.log('this is the others', others)
-               try {
-  
-             const response= axios.post('http://localhost:3000/deletepdf', {pdfId:e._id, userId})
-              setcount(count-1)
-              setdata([...others])
 
-                   } catch (error) {
-                    console.log('this is the error')
-                }
+                  console.log('button is pressed')
+                 const others= data.filter((er)=> er._id != e._id )
+              console.log('this is the others', others)
+
+              console.log('this is the selected pdf id', e._id)
+              console.log('this is the userId', userId)
+
+             const pdfId= e._id
+             if(pdfId && userId)
+             {
+
+            try {
+
+                console.log('yeh h wo jisper click kra h ',pdfId)
+                const response=  await axios.post('http://localhost:3000/deletepdf', {pdfId:e._id, userId})
+                console.log('this is the response', response)
+                dispatch(setupload(response.data.final))
+                /////////////////////isko krna h ab/////////////////
+                
+                 dispatch(changeuserpdfupload(response.data.allupload))
+
+                setcount(count-1)
+                setdata(others)
+  
+            } 
+            catch (error) {
+              console.log('this is the error', error)
+            }
+
+             }
+             else
+             {
+              console.log(" pdfId e.Id is not fount ")
+             }
+              
+          
+            
 
         }
 
-        useEffect(()=>{
-          console.log('this is the data', data)
-        },[data])
+
+
         const {getRootProps, getInputProps} = useDropzone({onDrop});
 
        const handleclick=  async function(e)
@@ -178,8 +209,8 @@ export default function Dashboard() {
                         'dd MMM yyyy '
                         )}
                   </p>
-                  <p className='bg-red-50 rounded-sm'>
-                    <button onClick={()=>handledelete(e)}>
+                  <p className='bg-red-50 rounded-sm w-8 mb-8' >
+                    <button onClick={()=>handledelete(e)} className=' w-28'>
 
                    <img src="../../src/assets/delete.svg" className='fill-blue-500 invert h-6' alt="itsdelete" />
                     </button>

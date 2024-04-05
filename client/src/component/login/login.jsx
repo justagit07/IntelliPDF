@@ -11,6 +11,7 @@ export default function Login() {
    
   const dispatch= useDispatch()
   const {register, handleSubmit, reset}= useForm()
+  
  const navigate=useNavigate()
      const submit= async(data)=>
      {
@@ -47,7 +48,7 @@ export default function Login() {
                      <button type='submit' className='w-[300px]  text-white bg-blue-500 h-10 rounded-lg mt-2'> Login</button>
                 </form>
                  
-                <p className='mt-4 text-sm  text-center'>No account ? <Link to='/home/pricing' className='text-blue-500'> Create one</Link></p>
+                <p className='mt-4 text-sm  text-center'>No account ? <Link to='/register' className='text-blue-500'> Create one</Link></p>
            </div>
 
     </div>

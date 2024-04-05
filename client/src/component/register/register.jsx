@@ -20,8 +20,8 @@ const submit= async(data) =>
   try {
     console.log('this is the data', data)
         const response=  await axios.post('http://localhost:3000/auth', data)
-        console.log('this is the response ', response)
-        navigate('/Login')
+        const x= response.data._id
+        navigate(`/home/pricing/${x}`)
         
   } catch (error) 
   {

@@ -17,7 +17,7 @@ import { Pinecone } from "@pinecone-database/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
 import OpenAI from 'openai'
 import deleteroutes from './routes/pdf.js'
-
+import Stripe from 'stripe';
 
 
 // const openai = new OpenAI();
@@ -73,39 +73,32 @@ app.post('/upload', upload.single('pdf'), async (req,res)=>
     console.log('this is the req.file meta data', req.file)
     const x= await Vectordb.create({title:originalname, size, path})
     const addingpdfid= await  user.updateOne({$push: {pdfupload:x._id}})
+    const usera= await  User.findById(_id)
+    const allupload= usera.pdfupload
+    console.log(`this is the all uploaded pdf id of the  ${usera.firstname} `, allupload)
+       
+    const detail= await  Promise.all( allupload.map(async(e)=>  await Vectordb.findById({_id:e})))
+
+    
+    
+    const final = detail.map(({title, _id , createdAt})=> {return {title, _id , createdAt }})
     
     console.log('this is the updated user', addingpdfid)
     res.status(200).json({
       createdAt:x.createdAt,
       name:x.title,
       path:x.path,
-      _id:x._id
+      _id:x._id,
+      final
     })
-  })
-  
-  app.use('/auth', authroutes)
-
-
-
-
-  
-  app.post('/pdfview', async function vectorformation(req,res)
-  {  const {filename}= req.body
+    })
+    app.use('/auth', authroutes)  
+   app.post('/pdfview', async function vectorformation(req,res)
+   {  const {filename}= req.body
       console.log('this is the filename', filename)
 const loader = new PDFLoader(`./public/${filename}`);   
 const docs = await loader.load();
 const Totalpages= docs.length
-
-console.log('this is the doc ', docs)
-console.log('');
-console.log('');
-console.log('');
-console.log('');
-console.log('');
-console.log('');
-console.log('totalnuber of the pages', Totalpages);
-
-
 const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 1000,
     chunkOverlap: 20,
@@ -174,3 +167,104 @@ const openai = new OpenAI({
 })
 
 app.use('/deletepdf', deleteroutes)
+
+
+const stripe = new Stripe(process.env.STRIPE_SECRET);
+
+
+
+app.post("/create-checkout-session", async (req, res) => {
+  try {
+         
+            const {userId}= req.body
+            console.log('this is my userid', userId); 
+
+
+
+            const session = await stripe.checkout.sessions.create({
+              success_url: `http://localhost:5173/sucess/${userId}`,
+              cancel_url: `http://localhost:5173/home/pricing/${userId}`,
+              line_items: [
+                {
+                  price: process.env.STRIPE_PRICE_ID,
+                  quantity: 1
+                }
+              ],
+              mode: 'subscription',
+              customer_email: 'customer@example.com', // Replace with the customer's email
+              billing_address_collection: 'required', // Collect billing address
+              metadata: {
+                userId: userId // Include userId as metadata
+              }
+
+            });       
+            
+          console.log('seesion.id', session.id);
+          
+    const x= await  User.findByIdAndUpdate(userId , {sessionId:session.id})
+
+    console.log(' will your datdabase is add he session id or not check bor', x);
+    res.status(200).json({ url: session.url })
+  } catch (e) {
+    console.log('error', e);
+    
+    res.status(500).json({ error: e.message })
+  }
+})
+
+
+app.post("/stripe-session", async (req, res) => {
+
+
+     const { userId } = req.body;
+      console.log("userId: ", userId);
+      const user= await User.findOne({_id:userId})
+     console.log('user of the firse', user);
+     const  {sessionId , paid_sub}= user
+
+
+  if(!sessionId || paid_sub === true) 
+  return res.send("fail");
+
+  try {
+
+      const session = await stripe.checkout.sessions.retrieve(user.sessionId);
+
+           
+        console.log('this is the about the session');
+        console.log('sessoin is', session);
+        
+        
+
+      // const sessionResult = {
+      //   id: 'cs_test_a1lpAti8opdtSIDZQIh9NZ6YhqMMwC0H5wrlwkUEYJc6GXokj2g5WyHkv4',
+      //   …
+      //   customer: 'cus_PD6t4AmeZrJ8zq',
+      //   …
+      //   status: 'complete',
+      //   …
+      //   subscription: 'sub_1OOgfhAikiJrlpwD7EQ5TLea',
+      //  …
+      // }
+    
+      // update the user
+
+      
+      if (session && session.status === "complete") 
+      {
+        const x= await User.findByIdAndUpdate(userId, {paid_sub:true ,  customerId:session.customer, 
+          subscription:"premium" , subscriptionId:session.subscription})
+         return res.send("success");
+      } 
+      else 
+      {
+        return res.send("fail");
+      }
+  } 
+  catch (error) {
+
+      console.error("An error occurred while retrieving the Stripe session:", error);
+      return res.send("fail");
+  }
+})
+

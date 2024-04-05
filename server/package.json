@@ -28,6 +28,8 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.0",
     "openai": "^4.30.0",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "stripe": "^14.24.0",
+    "uuid": "^9.0.1"
   }
 }

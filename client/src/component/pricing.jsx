@@ -1,12 +1,27 @@
 import React from 'react'
 import Navbar from './Navbar'
+import {useParams} from 'react-router-dom'
 import {Link, useNavigate} from 'react-router-dom'
+import axios  from 'axios'
 export default function Pricing() {
       const navigate= useNavigate()
-    const handleclick= ()=>
+      const {id}= useParams()
+      console.log('this is the register user id', id)
+    const handlefree= function ()
     {
-        navigate('/register')
+      navigate('/login')
     }
+    const handleclick= async ()=>
+    {
+
+        const response=  await axios.post('http://localhost:3000/create-checkout-session', {userId: id})
+        console.log('response from axios is ', response.data.url)
+        window.location = response.data.url
+    }
+
+
+
+
   return (
     <div className='bg-neutral-100 h-screen'>
       <Navbar/>
@@ -43,8 +58,8 @@ export default function Pricing() {
 <div className='items-center content-center m-4  flex justify-center'>
     
           <button className='flex justify-center  items-center ' >
-            <div className='flex  bg-neutral-300 w-[200px] gap-2 rounded-md h-10 justify-center items-center ' onClick={handleclick}> 
-            Sign up
+            <div className='flex  bg-neutral-300 w-[200px] gap-2 rounded-md h-10 justify-center items-center ' onClick={ handlefree}> 
+               Signup
             <img src="../../src/assets/right.svg" className='fill-black' alt="" />
             </div>
           </button>
