@@ -51,6 +51,7 @@ export default function Dashboard() {
              }
             
              setdata([...data,{
+              _id:response.data._id,
               title:response.data.name,
               createdAt:response.data.createdAt,
               updatedAt:response.data.updatedAt
@@ -91,7 +92,7 @@ export default function Dashboard() {
                 console.log('this is the response', response)
                 dispatch(setupload(response.data.final))
                 /////////////////////isko krna h ab/////////////////
-                
+
                  dispatch(changeuserpdfupload(response.data.allupload))
 
                 setcount(count-1)
