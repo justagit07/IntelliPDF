@@ -92,6 +92,8 @@ app.post('/upload', upload.single('pdf'), async (req,res)=>
       final
     })
     })
+    console.log('this is the pdf-project');
+    
     app.use('/auth', authroutes)  
    app.post('/pdfview', async function vectorformation(req,res)
    {  const {filename}= req.body
