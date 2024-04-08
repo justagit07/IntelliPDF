@@ -93,6 +93,7 @@ app.post('/upload', upload.single('pdf'), async (req,res)=>
     })
     })
     console.log('this is the pdf-project');
+    console.log('this is the new update')
     
     app.use('/auth', authroutes)  
    app.post('/pdfview', async function vectorformation(req,res)
