@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGODB).then(()=>{
 })
   app.use(cors(
     {
-        origin:"http://localhost:5173",
+        origin:"http://localhost:5174",
         credentials:true,
         methods:["PUT", "DELETE", "POST", "GET", "PATCH"]
     }
@@ -236,23 +236,7 @@ app.post("/stripe-session", async (req, res) => {
            
         console.log('this is the about the session');
         console.log('sessoin is', session);
-        
-        
-
-      // const sessionResult = {
-      //   id: 'cs_test_a1lpAti8opdtSIDZQIh9NZ6YhqMMwC0H5wrlwkUEYJc6GXokj2g5WyHkv4',
-      //   …
-      //   customer: 'cus_PD6t4AmeZrJ8zq',
-      //   …
-      //   status: 'complete',
-      //   …
-      //   subscription: 'sub_1OOgfhAikiJrlpwD7EQ5TLea',
-      //  …
-      // }
-    
-      // update the user
-
-      
+              
       if (session && session.status === "complete") 
       {
         const x= await User.findByIdAndUpdate(userId, {paid_sub:true ,  customerId:session.customer, 

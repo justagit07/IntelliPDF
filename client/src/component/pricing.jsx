@@ -69,7 +69,7 @@ export default function Pricing() {
 
 
 <div className=' shadow-lg border-2 border-blue-400 rounded-xl mt-10 md:mt-0 content-center  bg-white w-72 '>
-        <p className='text-center font-semibold text-2xl my-3'>Free</p>
+        <p className='text-center font-semibold text-2xl my-3'>Premium</p>
         <p className=' text-center text-neutral-400 my-3 text-sm'>For small size projects.</p>
 
           <p className='font-bold text-4xl h-12 align-middle content-center text-center my-3'>₹ 199</p>
